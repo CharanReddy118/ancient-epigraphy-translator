@@ -90,7 +90,7 @@ def translate_inscription_fast(image_file, key, status_box):
         url = f"https://generativelanguage.googleapis.com/v1beta/models/{model_name}:generateContent?key={key}"
         
         try:
-            response = requests.post(url, json=payload, headers={"Content-Type": "application/json"}, timeout=15)
+            response = requests.post(url, json=payload, headers={"Content-Type": "application/json"}, timeout=120)
             res_json = response.json()
 
             if response.status_code == 200:
