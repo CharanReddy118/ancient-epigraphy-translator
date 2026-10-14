@@ -1,3 +1,4 @@
+
 import streamlit as st
 import requests
 import base64
@@ -14,25 +15,20 @@ st.set_page_config(
 )
 
 # ==========================================
-# 2. CUSTOM HERITAGE THEME
+# 2. HERITAGE THEME
 # ==========================================
 st.markdown("""
 <style>
-    /* Main application */
     .stApp {
         background-color: #FCFBF8 !important;
         color: #293A32 !important;
         font-family: 'Inter', sans-serif;
     }
 
-    /* Hide Streamlit default elements */
-    #MainMenu,
-    footer,
-    header {
+    #MainMenu, footer, header {
         visibility: hidden;
     }
 
-    /* Sidebar */
     [data-testid="stSidebar"] {
         background-color: #252730 !important;
     }
@@ -41,7 +37,6 @@ st.markdown("""
         color: #F7F5EF !important;
     }
 
-    /* Hero section */
     .hero-tag {
         text-align: center;
         font-size: 0.85rem;
@@ -74,105 +69,48 @@ st.markdown("""
         color: #263C31 !important;
     }
 
-    /* ==========================================
-       FILE UPLOADER - LIGHT HERITAGE DESIGN
-       ========================================== */
-
-    /* Outer uploader container */
+    /* Upload container */
     [data-testid="stFileUploader"] {
         background: #F1F5EF !important;
-        background-color: #F1F5EF !important;
         border: 1px solid #D7E2D5 !important;
         border-radius: 14px !important;
         padding: 12px !important;
     }
 
-    /* Target uploader dropzone */
-    [data-testid="stFileUploaderDropzone"],
-    [data-testid="stFileUploadDropzone"],
-    [data-testid="stFileUploader"] section,
-    [data-testid="stFileUploader"] section > div {
+    /* Upload dropzone */
+    [data-testid="stFileUploaderDropzone"] {
         background: #F8FAF6 !important;
-        background-color: #F8FAF6 !important;
         border: 2px dashed #A8BEA8 !important;
         border-radius: 10px !important;
         box-shadow: none !important;
     }
 
-    /* Override dark backgrounds on uploader descendants */
-    [data-testid="stFileUploader"] section,
-    [data-testid="stFileUploader"] section > div,
-    [data-testid="stFileUploaderDropzone"],
-    [data-testid="stFileUploadDropzone"] {
-        color: #344B3C !important;
-    }
-
-    /* Drag-and-drop instructions */
-    [data-testid="stFileUploader"] section p,
-    [data-testid="stFileUploader"] section span,
-    [data-testid="stFileUploader"] section small,
-    [data-testid="stFileUploader"] [data-testid="stFileUploadDropzoneInstructions"],
-    [data-testid="stFileUploadDropzone"] p,
-    [data-testid="stFileUploadDropzone"] span,
-    [data-testid="stFileUploadDropzone"] small {
+    [data-testid="stFileUploaderDropzone"] p,
+    [data-testid="stFileUploaderDropzone"] span,
+    [data-testid="stFileUploaderDropzone"] small {
         color: #42594A !important;
     }
 
-    /* Upload button */
-    [data-testid="stFileUploader"] section button,
-    [data-testid="stFileUploaderDropzone"] button,
-    [data-testid="stFileUploadDropzone"] button {
+    /* Browse files button */
+    [data-testid="stFileUploaderDropzone"] button {
         background: #24543A !important;
-        background-color: #24543A !important;
         color: #FFFFFF !important;
         border: 1px solid #24543A !important;
         border-radius: 7px !important;
-        font-weight: 600 !important;
-        padding: 0.45rem 1.2rem !important;
-        box-shadow: none !important;
-        opacity: 1 !important;
     }
 
-    /* Button label */
-    [data-testid="stFileUploader"] section button *,
-    [data-testid="stFileUploaderDropzone"] button *,
-    [data-testid="stFileUploadDropzone"] button * {
+    [data-testid="stFileUploaderDropzone"] button * {
         color: #FFFFFF !important;
         fill: #FFFFFF !important;
-        opacity: 1 !important;
     }
 
-    /* Upload icon */
-    [data-testid="stFileUploader"] section button svg,
-    [data-testid="stFileUploadDropzone"] button svg,
-    [data-testid="stFileUploadDropzone"] button svg {
-        fill: #FFFFFF !important;
-        color: #FFFFFF !important;
-        stroke: #FFFFFF !important;
-    }
-
-    /* Button hover */
-    [data-testid="stFileUploader"] section button:hover,
-    [data-testid="stFileUploaderDropzone"] button:hover,
-    [data-testid="stFileUploadDropzone"] button:hover {
+    [data-testid="stFileUploaderDropzone"] button:hover {
         background: #36724F !important;
-        background-color: #36724F !important;
-        border-color: #36724F !important;
     }
 
-    /* Dropzone hover */
-    [data-testid="stFileUploader"] section:hover,
-    [data-testid="stFileUploadDropzone"]:hover {
-        background: #EDF4EA !important;
-        background-color: #EDF4EA !important;
-        border-color: #527B5D !important;
-    }
-
-    /* Uploaded file card */
-    [data-testid="stFileUploaderFile"],
-    [data-testid="stFileUploader"] [data-testid="stFileUploaderFile"] {
+    /* Uploaded file details */
+    [data-testid="stFileUploaderFile"] {
         background: #FFFFFF !important;
-        background-color: #FFFFFF !important;
         border: 1px solid #DCE5D9 !important;
         border-radius: 8px !important;
     }
@@ -181,49 +119,36 @@ st.markdown("""
         color: #344B3C !important;
     }
 
-    /* General buttons */
+    /* Main action buttons */
     div.stButton > button {
         background: #24543A !important;
-        background-color: #24543A !important;
         color: #FFFFFF !important;
         border: 1px solid #24543A !important;
         border-radius: 8px !important;
         padding: 0.65rem 1.2rem !important;
         font-weight: 600 !important;
-        transition: all 0.2s ease-in-out;
     }
 
     div.stButton > button:hover {
         background: #36724F !important;
-        background-color: #36724F !important;
         border-color: #36724F !important;
-        color: #FFFFFF !important;
     }
 
-    div.stButton > button:focus {
-        outline: 2px solid #A8BEA8 !important;
-        outline-offset: 3px !important;
-    }
-
-    /* Image preview */
     [data-testid="stImage"] img {
         border-radius: 10px !important;
     }
 
-    /* Translation placeholder */
     .discovery-placeholder {
         padding: 3rem 1.2rem;
         text-align: center;
         background: #FFFFFF;
         border: 1px solid #E1E7DE;
         border-radius: 12px;
-        color: #68796D;
     }
 
     .placeholder-title {
         font-size: 1.1rem;
         color: #344B3C !important;
-        margin-bottom: 0.6rem;
     }
 
     .placeholder-text {
@@ -232,12 +157,10 @@ st.markdown("""
         color: #68796D !important;
     }
 
-    /* Alerts */
     [data-testid="stAlert"] {
         border-radius: 9px !important;
     }
 
-    /* Responsive design */
     @media (max-width: 768px) {
         .hero-title {
             font-size: 1.8rem;
@@ -252,10 +175,6 @@ st.markdown("""
             font-size: 0.95rem;
             margin-bottom: 1.5rem;
         }
-
-        [data-testid="stFileUploader"] {
-            padding: 8px !important;
-        }
     }
 </style>
 """, unsafe_allow_html=True)
@@ -264,7 +183,7 @@ st.markdown("""
 # ==========================================
 # 3. GEMINI API KEY
 # ==========================================
-api_key = st.secrets.get("GEMINI_API_KEY", "")
+api_key = st.secrets.get("GEMINI_API_KEY", "").strip()
 
 
 # ==========================================
@@ -310,90 +229,216 @@ st.markdown(
 
 
 # ==========================================
-# 6. TRANSLATION ENGINE
+# 6. DISCOVER AVAILABLE GEMINI MODELS
 # ==========================================
-def translate_inscription_fast(image_file, key, status_box):
+def get_available_models(key):
+    """
+    Fetch models available to this API key.
+    Keep only models that support generateContent.
+    """
+
+    url = (
+        "https://generativelanguage.googleapis.com/"
+        "v1beta/models"
+    )
+
+    available = []
+    page_token = None
+
+    try:
+        # Handle pagination in the model list.
+        for _ in range(10):
+            params = {
+                "key": key,
+                "pageSize": 100
+            }
+
+            if page_token:
+                params["pageToken"] = page_token
+
+            response = requests.get(
+                url,
+                params=params,
+                timeout=30
+            )
+
+            if response.status_code != 200:
+                try:
+                    error_data = response.json()
+                    message = error_data.get(
+                        "error", {}
+                    ).get("message", response.text)
+                except ValueError:
+                    message = response.text
+
+                return [], str(message)
+
+            data = response.json()
+
+            for model in data.get("models", []):
+                methods = model.get(
+                    "supportedGenerationMethods", []
+                )
+
+                model_name = model.get("name", "")
+
+                if (
+                    model_name.startswith("models/gemini-")
+                    and "generateContent" in methods
+                ):
+                    available.append(
+                        model_name.replace("models/", "", 1)
+                    )
+
+            page_token = data.get("nextPageToken")
+
+            if not page_token:
+                break
+
+        # Prefer fast general-purpose Gemini models.
+        preferred_order = [
+            "gemini-3.8-flash",
+            "gemini-3-flash",
+            "gemini-2.5-flash",
+            "gemini-2.5-flash-lite",
+            "gemini-2.0-flash",
+            "gemini-2.0-flash-lite",
+        ]
+
+        ordered = []
+
+        for preferred in preferred_order:
+            if preferred in available and preferred not in ordered:
+                ordered.append(preferred)
+
+        # Add any other eligible models returned by the API.
+        for name in sorted(available):
+            if name not in ordered:
+                ordered.append(name)
+
+        return ordered, None
+
+    except requests.RequestException as e:
+        return [], f"Could not contact Gemini API: {str(e)}"
+
+    except (ValueError, TypeError) as e:
+        return [], f"Could not read model list: {str(e)}"
+
+
+# ==========================================
+# 7. INSCRIPTION TRANSLATION ENGINE
+# ==========================================
+def translate_inscription(image_file, key, status_box):
 
     if not key:
         return (
-            "⚠️ **Error:** API key is missing. "
-            "Configure `GEMINI_API_KEY` in Streamlit secrets."
+            "⚠️ **API key missing.** Add `GEMINI_API_KEY` "
+            "to your Streamlit secrets."
         )
 
+    # Discover models instead of relying on retired names.
+    status_box.info("🔎 Checking available Gemini models...")
+
+    models, model_error = get_available_models(key)
+
+    if model_error:
+        return (
+            "❌ **Unable to retrieve available Gemini models.**\n\n"
+            f"**Details:** {model_error}\n\n"
+            "Check that your API key is valid and that the Gemini "
+            "API is enabled for your project."
+        )
+
+    if not models:
+        return (
+            "❌ **No compatible Gemini models found.**\n\n"
+            "Your API key did not return any models supporting "
+            "`generateContent`. Check your API key, project access, "
+            "and available models."
+        )
+
+    # Prepare image.
     try:
         image_file.seek(0)
 
-        with Image.open(image_file) as original_image:
-            img = original_image.convert("RGB")
-            buffered = io.BytesIO()
-            img.save(buffered, format="JPEG", quality=90)
+        with Image.open(image_file) as original:
+            image = original.convert("RGB")
 
-        img_b64 = base64.b64encode(
-            buffered.getvalue()
+            buffer = io.BytesIO()
+            image.save(buffer, format="JPEG", quality=90)
+
+        image_b64 = base64.b64encode(
+            buffer.getvalue()
         ).decode("utf-8")
 
     except Exception as e:
-        return f"❌ **Image Processing Error:** {str(e)}"
+        return f"❌ **Image processing error:** {str(e)}"
 
     prompt = """
     You are an experienced Indian epigraphist, historian, and linguist.
 
-    Carefully analyze the attached photograph of an ancient inscription.
+    Analyze the attached photograph of an ancient Indian inscription.
 
     Tasks:
-    1. Identify the script and transcribe readable characters.
-    2. Explain the historical context, dynasty, ruler, period, and
-       purpose when supported by evidence.
-    3. Translate the readable content into modern Telugu.
-    4. Translate the readable content into modern English.
-    5. Identify damaged, uncertain, or illegible portions.
-    6. Never invent unreadable words or unsupported historical facts.
-       Clearly distinguish confirmed information from interpretations.
+    1. Identify the script and language, if possible.
+    2. Transcribe characters that are genuinely readable.
+    3. Explain the historical context, possible dynasty, ruler,
+       period and purpose only when supported by evidence.
+    4. Translate the readable content into modern Telugu.
+    5. Translate the readable content into modern English.
+    6. Mark damaged, uncertain or illegible passages clearly.
+    7. Never invent missing text or claim a historical fact without
+       sufficient evidence. Separate confirmed details from guesses.
 
-    Format your response in Markdown:
+    Use this Markdown format:
 
     ### 📜 Historical Context
+    Explain the likely historical setting and confidence level.
 
-    ### 🔤 Script Identification and Transcription
+    ### 🔤 Script and Transcription
+    Identify the script and transcribe the readable text.
 
     ### 🇮🇳 Modern Telugu Translation (ఆధునిక తెలుగు భావం)
+    Give the Telugu translation. Clearly mark uncertain passages.
 
     ### 🇬🇧 Modern English Translation
+    Give the English translation.
 
     ### 📝 Notes and Uncertainties
+    Explain damage, unreadable characters and any limitations.
     """
 
     payload = {
-        "contents": [{
-            "parts": [
-                {"text": prompt},
-                {
-                    "inlineData": {
-                        "mimeType": "image/jpeg",
-                        "data": img_b64
+        "contents": [
+            {
+                "parts": [
+                    {"text": prompt},
+                    {
+                        "inline_data": {
+                            "mime_type": "image/jpeg",
+                            "data": image_b64
+                        }
                     }
-                }
-            ]
-        }]
+                ]
+            }
+        ],
+        "generationConfig": {
+            "temperature": 0.2,
+            "maxOutputTokens": 4096
+        }
     }
-
-    target_models = [
-        "gemini-2.0-flash",
-        "gemini-1.5-flash",
-        "gemini-1.5-pro"
-    ]
 
     last_error = ""
 
-    for model_name in target_models:
-
+    # Try eligible models until one successfully responds.
+    for model_name in models:
         status_box.info(
             f"🔎 Analyzing inscription with {model_name}..."
         )
 
         url = (
             "https://generativelanguage.googleapis.com/"
-            f"v1/models/{model_name}:generateContent"
+            f"v1beta/models/{model_name}:generateContent"
         )
 
         try:
@@ -406,42 +451,88 @@ def translate_inscription_fast(image_file, key, status_box):
             )
 
             try:
-                res_json = response.json()
+                data = response.json()
             except ValueError:
                 last_error = (
-                    f"{model_name}: Invalid response from the API."
+                    f"{model_name}: API returned an invalid response."
                 )
                 continue
 
             if response.status_code == 200:
-                candidates = res_json.get("candidates", [])
+                candidates = data.get("candidates", [])
 
                 if candidates:
-                    content = candidates[0].get("content", {})
-                    parts = content.get("parts", [])
+                    parts = candidates[0].get(
+                        "content", {}
+                    ).get("parts", [])
 
-                    text_parts = [
+                    result = "\n\n".join(
                         part["text"]
                         for part in parts
                         if "text" in part
-                    ]
+                    )
 
-                    if text_parts:
+                    if result.strip():
                         status_box.success(
-                            "✅ Inscription analysis completed."
+                            f"✅ Analysis completed using {model_name}."
                         )
-                        return "\n\n".join(text_parts)
+                        return result
 
-                last_error = (
-                    f"{model_name}: No readable translation returned."
+                feedback = data.get("promptFeedback", {})
+                reason = feedback.get(
+                    "blockReason", "No text returned"
                 )
 
-            else:
-                error_message = res_json.get(
-                    "error", {}
-                ).get("message", "Unknown API error")
+                last_error = f"{model_name}: {reason}"
+                continue
 
-                last_error = f"{model_name}: {error_message}"
+            error_data = data.get("error", {})
+            error_code = error_data.get("code", response.status_code)
+            error_message = error_data.get(
+                "message", "Unknown API error"
+            )
+            error_status = error_data.get("status", "")
+
+            last_error = (
+                f"{model_name}: HTTP {error_code} - {error_message}"
+            )
+
+            # These errors are usually not fixed by switching models.
+            if error_code in (400, 401, 403):
+                status_box.error(
+                    "Gemini rejected the request. Checking the error..."
+                )
+
+                # Continue only for model-specific incompatibility.
+                lower_message = error_message.lower()
+
+                model_issue = (
+                    "not found" in lower_message
+                    or "not supported" in lower_message
+                    or "unsupported" in lower_message
+                )
+
+                if model_issue:
+                    continue
+
+                return (
+                    "❌ **Gemini API rejected the request.**\n\n"
+                    f"**Details:** {last_error}\n\n"
+                    "Check your API key, permissions, image request, "
+                    "and API configuration."
+                )
+
+            # Quota/rate-limit errors generally won't improve by
+            # repeatedly switching models.
+            if error_code == 429 or error_status == "RESOURCE_EXHAUSTED":
+                return (
+                    "⚠️ **Gemini API quota or rate limit reached.**\n\n"
+                    f"**Details:** {last_error}\n\n"
+                    "Check your Gemini API usage and quota, then retry."
+                )
+
+            # Server-side errors may be transient; try another model.
+            continue
 
         except requests.Timeout:
             last_error = f"{model_name}: Request timed out."
@@ -454,13 +545,14 @@ def translate_inscription_fast(image_file, key, status_box):
 
     return (
         "❌ **Translation failed.**\n\n"
-        f"**Details:** {last_error}\n\n"
-        "Check your API key, model availability, quota, and network."
+        f"**Last error:** {last_error}\n\n"
+        "The API returned compatible model names, but none completed "
+        "the request. Check model access, quota, and API status."
     )
 
 
 # ==========================================
-# 7. MAIN WORKSPACE
+# 8. MAIN WORKSPACE
 # ==========================================
 st.markdown("---")
 
@@ -474,7 +566,7 @@ with col1:
     )
 
     uploaded_file = st.file_uploader(
-        "Upload an image",
+        "Upload an inscription image",
         type=["png", "jpg", "jpeg"],
         accept_multiple_files=False,
         help="Supported formats: PNG, JPG and JPEG.",
@@ -497,15 +589,30 @@ with col1:
 with col2:
     st.markdown("### 🔍 Your Discovery")
 
-    if uploaded_file is not None:
+    if uploaded_file is None:
+        st.markdown(
+            """
+            <div class="discovery-placeholder">
+                <p class="placeholder-title">
+                    Your translation will appear here.
+                </p>
+                <p class="placeholder-text">
+                    Upload an inscription to discover its historical
+                    context, Telugu meaning and English translation
+                    using multimodal AI.
+                </p>
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
 
-        if not api_key:
-            st.error(
-                "⚠️ API key not configured. "
-                "Add GEMINI_API_KEY to your Streamlit secrets."
-            )
+    elif not api_key:
+        st.error(
+            "⚠️ `GEMINI_API_KEY` is missing from Streamlit secrets."
+        )
 
-        elif st.button(
+    else:
+        if st.button(
             "Begin translation ➜",
             type="primary",
             use_container_width=True
@@ -515,7 +622,7 @@ with col2:
             with st.spinner(
                 "Analyzing the inscription and interpreting its text..."
             ):
-                result = translate_inscription_fast(
+                result = translate_inscription(
                     uploaded_file,
                     api_key,
                     status_placeholder
@@ -524,26 +631,9 @@ with col2:
             st.markdown("---")
             st.markdown(result)
 
-    else:
-        st.markdown(
-            """
-            <div class="discovery-placeholder">
-                <p class="placeholder-title">
-                    Your translation will appear here.
-                </p>
-                <p class="placeholder-text">
-                    Upload an inscription to explore its historical
-                    context, Telugu meaning, and English translation
-                    using AI.
-                </p>
-            </div>
-            """,
-            unsafe_allow_html=True
-        )
-
 
 # ==========================================
-# 8. FOOTER
+# 9. FOOTER
 # ==========================================
 st.markdown("---")
 
