@@ -1,4 +1,3 @@
-
 import streamlit as st
 import requests
 import base64
@@ -100,8 +99,7 @@ st.markdown("""
         box-shadow: none !important;
     }
 
-    /* Override dark backgrounds on uploader descendants,
-       excluding buttons and SVG icons */
+    /* Override dark backgrounds on uploader descendants */
     [data-testid="stFileUploader"] section,
     [data-testid="stFileUploader"] section > div,
     [data-testid="stFileUploaderDropzone"],
@@ -370,17 +368,18 @@ def translate_inscription_fast(image_file, key, status_box):
             "parts": [
                 {"text": prompt},
                 {
-                    "inline_data": {
-                        "mime_type": "image/jpeg",
+                    "inlineData": {
+                        "mimeType": "image/jpeg",
                         "data": img_b64
                     }
                 }
             ]
         }]
     }
+
     target_models = [
-        "gemini-3.0-flash",
         "gemini-2.0-flash",
+        "gemini-1.5-flash",
         "gemini-1.5-pro"
     ]
 
@@ -394,7 +393,7 @@ def translate_inscription_fast(image_file, key, status_box):
 
         url = (
             "https://generativelanguage.googleapis.com/"
-            f"v1beta/models/{model_name}:generateContent"
+            f"v1/models/{model_name}:generateContent"
         )
 
         try:
