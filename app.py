@@ -11,7 +11,7 @@ st.set_page_config(
     layout="wide"
 )
 
-# Custom Heritage Theme CSS (Fixing Streamlit's file uploader box color)
+# Custom Heritage Theme CSS (Fixing Streamlit's file uploader box & upload button color)
 st.markdown("""
     <style>
         /* Main background */
@@ -51,17 +51,32 @@ st.markdown("""
             margin-bottom: 2.5rem;
         }
 
-        /* Force Streamlit File Uploader Box to be Clean White/Cream */
+        /* Streamlit File Uploader Box */
         [data-testid="stFileUploadDropzone"] {
             background-color: #ffffff !important;
             border: 2px dashed #d1d8d3 !important;
             border-radius: 8px !important;
         }
-        [data-testid="stFileUploadDropzone"] p, [data-testid="stFileUploadDropzone"] span, [data-testid="stFileUploadDropzone"] small {
+        [data-testid="stFileUploadDropzone"] p, 
+        [data-testid="stFileUploadDropzone"] span, 
+        [data-testid="stFileUploadDropzone"] small {
             color: #4b5563 !important;
         }
 
-        /* Custom Button Styling */
+        /* 🎨 Custom Upload Button Styling Inside File Uploader */
+        [data-testid="stFileUploadDropzone"] button {
+            background-color: #1b3b2b !important;
+            color: #ffffff !important;
+            border: none !important;
+            border-radius: 4px !important;
+            font-weight: 500 !important;
+        }
+        [data-testid="stFileUploadDropzone"] button:hover {
+            background-color: #2c5843 !important;
+            color: #ffffff !important;
+        }
+
+        /* Custom General Button Styling */
         div.stButton > button:first-child {
             background-color: #1b3b2b;
             color: white;
