@@ -11,7 +11,7 @@ st.set_page_config(
     layout="wide"
 )
 
-# Custom Heritage Theme CSS (Fixing card and uploader visibility)
+# Custom Heritage Theme CSS (Fixing Streamlit's file uploader box color)
 st.markdown("""
     <style>
         /* Main background */
@@ -49,6 +49,16 @@ st.markdown("""
             font-size: 1.05rem;
             color: #5c6b63;
             margin-bottom: 2.5rem;
+        }
+
+        /* Force Streamlit File Uploader Box to be Clean White/Cream */
+        [data-testid="stFileUploadDropzone"] {
+            background-color: #ffffff !important;
+            border: 2px dashed #d1d8d3 !important;
+            border-radius: 8px !important;
+        }
+        [data-testid="stFileUploadDropzone"] p, [data-testid="stFileUploadDropzone"] span, [data-testid="stFileUploadDropzone"] small {
+            color: #4b5563 !important;
         }
 
         /* Custom Button Styling */
@@ -172,13 +182,6 @@ with col1:
     
     if uploaded_file is not None:
         st.image(uploaded_file, caption="Selected Artifact", use_container_width=True)
-    else:
-        st.markdown("""
-            <div style="padding: 2.5rem 1rem; text-align: center; background-color: #ffffff; border: 2px dashed #d1d8d3; border-radius: 8px; color: #5c6b63;">
-                <p style="font-size: 1rem; font-weight: 500; margin-bottom: 0.2rem;">Drop inscription photo here</p>
-                <p style="font-size: 0.8rem; color: #8c9a92;">Supports PNG, JPG, JPEG</p>
-            </div>
-        """, unsafe_allow_html=True)
 
 with col2:
     st.markdown("### 🔍 Your Discovery")
@@ -195,7 +198,7 @@ with col2:
                     st.markdown(result)
     else:
         st.markdown("""
-            <div style="padding: 3.2rem 1rem; text-align: center; background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 8px; color: #8c9a92;">
+            <div style="padding: 3.8rem 1rem; text-align: center; background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 8px; color: #8c9a92;">
                 <p style="font-size: 1.1rem; margin-bottom: 0.5rem; color: #374151;">Your translation will appear here.</p>
                 <p style="font-size: 0.85rem;">This step processes inscription pixels using multimodal AI.</p>
             </div>
