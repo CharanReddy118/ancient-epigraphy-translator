@@ -1,3 +1,4 @@
+
 import streamlit as st
 import requests
 import base64
@@ -14,25 +15,20 @@ st.set_page_config(
 )
 
 # ==========================================
-# 2. CUSTOM HERITAGE THEME
+# 2. HERITAGE THEME
 # ==========================================
 st.markdown("""
 <style>
-    /* Main application */
     .stApp {
         background-color: #FCFBF8 !important;
         color: #293A32 !important;
         font-family: 'Inter', sans-serif;
     }
 
-    /* Hide Streamlit default elements */
-    #MainMenu,
-    footer,
-    header {
+    #MainMenu, footer, header {
         visibility: hidden;
     }
 
-    /* Sidebar */
     [data-testid="stSidebar"] {
         background-color: #252730 !important;
     }
@@ -41,7 +37,6 @@ st.markdown("""
         color: #F7F5EF !important;
     }
 
-    /* Hero section */
     .hero-tag {
         text-align: center;
         font-size: 0.85rem;
@@ -74,24 +69,16 @@ st.markdown("""
         color: #263C31 !important;
     }
 
-    /* ==========================================
-       FILE UPLOADER - LIGHT HERITAGE DESIGN
-       ========================================== */
-
-    /* Outer uploader container */
+    /* Upload area */
     [data-testid="stFileUploader"] {
         background: #F1F5EF !important;
-        background-color: #F1F5EF !important;
         border: 1px solid #D7E2D5 !important;
         border-radius: 14px !important;
         padding: 12px !important;
     }
 
-    /* Target uploader dropzone */
     [data-testid="stFileUploaderDropzone"],
-    [data-testid="stFileUploadDropzone"],
-    [data-testid="stFileUploader"] section,
-    [data-testid="stFileUploader"] section > div {
+    [data-testid="stFileUploadDropzone"] {
         background: #F8FAF6 !important;
         background-color: #F8FAF6 !important;
         border: 2px dashed #A8BEA8 !important;
@@ -99,80 +86,36 @@ st.markdown("""
         box-shadow: none !important;
     }
 
-    /* Override dark backgrounds on uploader descendants */
-    [data-testid="stFileUploader"] section,
-    [data-testid="stFileUploader"] section > div,
-    [data-testid="stFileUploaderDropzone"],
-    [data-testid="stFileUploadDropzone"] {
-        color: #344B3C !important;
-    }
-
-    /* Drag-and-drop instructions */
-    [data-testid="stFileUploader"] section p,
-    [data-testid="stFileUploader"] section span,
-    [data-testid="stFileUploader"] section small,
-    [data-testid="stFileUploader"] [data-testid="stFileUploadDropzoneInstructions"],
+    [data-testid="stFileUploaderDropzone"] p,
+    [data-testid="stFileUploaderDropzone"] span,
+    [data-testid="stFileUploaderDropzone"] small,
     [data-testid="stFileUploadDropzone"] p,
-    [data-testid="stFileUploadDropzone"] span,
-    [data-testid="stFileUploadDropzone"] small {
+    [data-testid="stFileUploadDropzone"] span {
         color: #42594A !important;
     }
 
-    /* Upload button */
-    [data-testid="stFileUploader"] section button,
     [data-testid="stFileUploaderDropzone"] button,
     [data-testid="stFileUploadDropzone"] button {
         background: #24543A !important;
-        background-color: #24543A !important;
         color: #FFFFFF !important;
         border: 1px solid #24543A !important;
         border-radius: 7px !important;
-        font-weight: 600 !important;
-        padding: 0.45rem 1.2rem !important;
-        box-shadow: none !important;
         opacity: 1 !important;
     }
 
-    /* Button label */
-    [data-testid="stFileUploader"] section button *,
     [data-testid="stFileUploaderDropzone"] button *,
     [data-testid="stFileUploadDropzone"] button * {
         color: #FFFFFF !important;
         fill: #FFFFFF !important;
-        opacity: 1 !important;
     }
 
-    /* Upload icon */
-    [data-testid="stFileUploader"] section button svg,
-    [data-testid="stFileUploadDropzone"] button svg,
-    [data-testid="stFileUploadDropzone"] button svg {
-        fill: #FFFFFF !important;
-        color: #FFFFFF !important;
-        stroke: #FFFFFF !important;
-    }
-
-    /* Button hover */
-    [data-testid="stFileUploader"] section button:hover,
     [data-testid="stFileUploaderDropzone"] button:hover,
     [data-testid="stFileUploadDropzone"] button:hover {
         background: #36724F !important;
-        background-color: #36724F !important;
-        border-color: #36724F !important;
     }
 
-    /* Dropzone hover */
-    [data-testid="stFileUploader"] section:hover,
-    [data-testid="stFileUploadDropzone"]:hover {
-        background: #EDF4EA !important;
-        background-color: #EDF4EA !important;
-        border-color: #527B5D !important;
-    }
-
-    /* Uploaded file card */
-    [data-testid="stFileUploaderFile"],
-    [data-testid="stFileUploader"] [data-testid="stFileUploaderFile"] {
+    [data-testid="stFileUploaderFile"] {
         background: #FFFFFF !important;
-        background-color: #FFFFFF !important;
         border: 1px solid #DCE5D9 !important;
         border-radius: 8px !important;
     }
@@ -181,49 +124,36 @@ st.markdown("""
         color: #344B3C !important;
     }
 
-    /* General buttons */
+    /* Translation button */
     div.stButton > button {
         background: #24543A !important;
-        background-color: #24543A !important;
         color: #FFFFFF !important;
         border: 1px solid #24543A !important;
         border-radius: 8px !important;
         padding: 0.65rem 1.2rem !important;
         font-weight: 600 !important;
-        transition: all 0.2s ease-in-out;
     }
 
     div.stButton > button:hover {
         background: #36724F !important;
-        background-color: #36724F !important;
         border-color: #36724F !important;
-        color: #FFFFFF !important;
     }
 
-    div.stButton > button:focus {
-        outline: 2px solid #A8BEA8 !important;
-        outline-offset: 3px !important;
-    }
-
-    /* Image preview */
     [data-testid="stImage"] img {
         border-radius: 10px !important;
     }
 
-    /* Translation placeholder */
     .discovery-placeholder {
         padding: 3rem 1.2rem;
         text-align: center;
         background: #FFFFFF;
         border: 1px solid #E1E7DE;
         border-radius: 12px;
-        color: #68796D;
     }
 
     .placeholder-title {
         font-size: 1.1rem;
         color: #344B3C !important;
-        margin-bottom: 0.6rem;
     }
 
     .placeholder-text {
@@ -232,12 +162,10 @@ st.markdown("""
         color: #68796D !important;
     }
 
-    /* Alerts */
     [data-testid="stAlert"] {
         border-radius: 9px !important;
     }
 
-    /* Responsive design */
     @media (max-width: 768px) {
         .hero-title {
             font-size: 1.8rem;
@@ -252,19 +180,15 @@ st.markdown("""
             font-size: 0.95rem;
             margin-bottom: 1.5rem;
         }
-
-        [data-testid="stFileUploader"] {
-            padding: 8px !important;
-        }
     }
 </style>
 """, unsafe_allow_html=True)
 
 
 # ==========================================
-# 3. GEMINI API KEY
+# 3. API KEY
 # ==========================================
-api_key = st.secrets.get("GEMINI_API_KEY", "")
+api_key = st.secrets.get("GEMINI_API_KEY", "").strip()
 
 
 # ==========================================
@@ -279,7 +203,7 @@ st.sidebar.markdown("### 📊 System Status")
 st.sidebar.markdown(
     """
     - **Engine:** Gemini Vision API
-    - **Timeout Limit:** 120s
+    - **Timeout Limit:** 120 seconds
     - **Status:** Online 🟢
     """
 )
@@ -310,156 +234,349 @@ st.markdown(
 
 
 # ==========================================
-# 6. TRANSLATION ENGINE
+# 6. GET MODELS AVAILABLE TO THIS API KEY
 # ==========================================
-def translate_inscription_fast(image_file, key, status_box):
+def get_available_models(key):
+    """
+    Retrieve models available to this API key.
+    Select only models supporting generateContent.
+    """
+
+    url = (
+        "https://generativelanguage.googleapis.com/"
+        "v1beta/models"
+    )
+
+    available = []
+    page_token = None
+
+    try:
+        # Follow pagination if the model list has multiple pages.
+        for _ in range(10):
+            params = {
+                "key": key,
+                "pageSize": 100
+            }
+
+            if page_token:
+                params["pageToken"] = page_token
+
+            response = requests.get(
+                url,
+                params=params,
+                timeout=30
+            )
+
+            if response.status_code != 200:
+                try:
+                    data = response.json()
+                    message = data.get(
+                        "error", {}
+                    ).get("message", response.text)
+                except ValueError:
+                    message = response.text
+
+                return [], (
+                    f"HTTP {response.status_code}: {message}"
+                )
+
+            data = response.json()
+
+            for model in data.get("models", []):
+                model_name = model.get("name", "")
+                short_name = model_name.removeprefix("models/")
+                methods = model.get(
+                    "supportedGenerationMethods", []
+                )
+
+                # Exclude special-purpose computer-use models.
+                if (
+                    short_name.startswith("gemini-")
+                    and "generateContent" in methods
+                    and "computer-use" not in short_name.lower()
+                ):
+                    available.append(short_name)
+
+            page_token = data.get("nextPageToken")
+
+            if not page_token:
+                break
+
+        # Try preferred general-purpose multimodal models first.
+        preferred_order = [
+            "gemini-3.5-flash-lite",
+            "gemini-3.5-flash",
+            "gemini-3.6-flash",
+            "gemini-3.8-flash",
+            "gemini-3.1-flash-lite",
+            "gemini-3-flash",
+            "gemini-3-flash-preview",
+            "gemini-2.5-flash",
+            "gemini-2.5-flash-lite",
+            "gemini-2.5-pro",
+        ]
+
+        ordered = []
+
+        for preferred in preferred_order:
+            if preferred in available and preferred not in ordered:
+                ordered.append(preferred)
+
+        # Include other eligible models reported by Google.
+        for name in sorted(set(available)):
+            if name not in ordered:
+                ordered.append(name)
+
+        if not ordered:
+            return [], (
+                "Google returned no Gemini models supporting "
+                "generateContent for this API key."
+            )
+
+        return ordered, None
+
+    except requests.RequestException as e:
+        return [], f"Could not connect to Gemini API: {e}"
+
+    except (ValueError, TypeError) as e:
+        return [], f"Could not process the model list: {e}"
+
+
+# ==========================================
+# 7. TRANSLATION ENGINE
+# ==========================================
+def translate_inscription(image_file, key, status_box):
 
     if not key:
         return (
-            "⚠️ **Error:** API key is missing. "
-            "Configure `GEMINI_API_KEY` in Streamlit secrets."
+            "⚠️ **API key missing.** Add `GEMINI_API_KEY` "
+            "to Streamlit secrets."
         )
 
+    # Discover current model availability.
+    status_box.info("🔎 Checking available Gemini models...")
+
+    models, model_error = get_available_models(key)
+
+    if model_error:
+        return (
+            "❌ **Could not retrieve Gemini models.**\n\n"
+            f"**Details:** {model_error}\n\n"
+            "Check your API key, project access and API configuration."
+        )
+
+    # Prepare image bytes.
     try:
         image_file.seek(0)
 
-        with Image.open(image_file) as original_image:
-            img = original_image.convert("RGB")
-            buffered = io.BytesIO()
-            img.save(buffered, format="JPEG", quality=90)
+        with Image.open(image_file) as original:
+            image = original.convert("RGB")
+            buffer = io.BytesIO()
+            image.save(buffer, format="JPEG", quality=90)
 
-        img_b64 = base64.b64encode(
-            buffered.getvalue()
+        image_b64 = base64.b64encode(
+            buffer.getvalue()
         ).decode("utf-8")
 
     except Exception as e:
-        return f"❌ **Image Processing Error:** {str(e)}"
+        return f"❌ **Image processing error:** {e}"
 
     prompt = """
-    You are an experienced Indian epigraphist, historian, and linguist.
+    You are an experienced Indian epigraphist, historian and linguist.
 
-    Carefully analyze the attached photograph of an ancient inscription.
+    Analyze the attached photograph of an ancient Indian inscription.
 
     Tasks:
-    1. Identify the script and transcribe readable characters.
-    2. Explain the historical context, dynasty, ruler, period, and
-       purpose when supported by evidence.
-    3. Translate the readable content into modern Telugu.
-    4. Translate the readable content into modern English.
-    5. Identify damaged, uncertain, or illegible portions.
-    6. Never invent unreadable words or unsupported historical facts.
-       Clearly distinguish confirmed information from interpretations.
+    1. Identify the script and language if possible.
+    2. Transcribe only characters that can reasonably be read.
+    3. Explain historical context, dynasty, ruler, era and purpose
+       only when supported by evidence.
+    4. Translate the readable text into modern Telugu.
+    5. Translate the readable text into modern English.
+    6. Identify damaged, uncertain or illegible passages.
+    7. Never invent missing text or unsupported historical facts.
+       Separate confirmed details from tentative interpretations.
 
-    Format your response in Markdown:
+    Use this Markdown format:
 
     ### 📜 Historical Context
+    Describe the likely period and historical setting.
 
     ### 🔤 Script Identification and Transcription
+    Identify the script and transcribe readable text.
 
     ### 🇮🇳 Modern Telugu Translation (ఆధునిక తెలుగు భావం)
+    Provide the Telugu meaning and mark uncertain passages.
 
     ### 🇬🇧 Modern English Translation
+    Provide the English meaning.
 
     ### 📝 Notes and Uncertainties
+    Explain damaged text, ambiguity and limitations.
     """
 
-    # 1. EXACT PAYLOAD FORMAT (camelCase)
     payload = {
-        "contents": [{
-            "parts": [
-                {"text": prompt},
-                {
-                    "inlineData": {
-                        "mimeType": "image/jpeg",
-                        "data": img_b64
+        "contents": [
+            {
+                "parts": [
+                    {"text": prompt},
+                    {
+                        "inline_data": {
+                            "mime_type": "image/jpeg",
+                            "data": image_b64
+                        }
                     }
-                }
-            ]
-        }]
+                ]
+            }
+        ],
+        "generationConfig": {
+            "temperature": 0.2,
+            "maxOutputTokens": 4096
+        }
     }
 
-    # 2. BULLETPROOF MODEL TAGS
-    target_models = [
-        "gemini-1.5-flash-001",   # Fixed flash version (most reliable)
-        "gemini-1.5-pro-001",     # Fixed pro version
-        "gemini-1.0-pro-vision-latest", # Legacy fallback
-        "gemini-pro-vision"
-    ]
+    errors = []
 
-    last_error = ""
+    for model_name in models:
+        status_box.info(
+            f"🔎 Analyzing inscription with {model_name}..."
+        )
 
-    for model_name in target_models:
-
-        status_box.info(f"🔎 Analyzing inscription with {model_name}...")
-
-        # 3. USE V1BETA WITH EXPLICIT URL PARAMS
-        url = f"https://generativelanguage.googleapis.com/v1beta/models/{model_name}:generateContent?key={key}"
+        endpoint = (
+            "https://generativelanguage.googleapis.com/"
+            f"v1beta/models/{model_name}:generateContent"
+        )
 
         try:
-            # Removed params={"key": key} since it's already in the URL
             response = requests.post(
-                url,
+                endpoint,
+                params={"key": key},
                 json=payload,
                 headers={"Content-Type": "application/json"},
                 timeout=120
             )
 
             try:
-                res_json = response.json()
+                data = response.json()
             except ValueError:
-                last_error = (
-                    f"{model_name}: Invalid response from the API."
+                errors.append(
+                    f"{model_name}: Invalid response from Google."
                 )
                 continue
 
             if response.status_code == 200:
-                candidates = res_json.get("candidates", [])
+                candidates = data.get("candidates", [])
 
                 if candidates:
-                    content = candidates[0].get("content", {})
-                    parts = content.get("parts", [])
+                    parts = candidates[0].get(
+                        "content", {}
+                    ).get("parts", [])
 
-                    text_parts = [
+                    answer = "\n\n".join(
                         part["text"]
                         for part in parts
                         if "text" in part
-                    ]
+                    )
 
-                    if text_parts:
+                    if answer.strip():
                         status_box.success(
-                            "✅ Inscription analysis completed."
+                            f"✅ Analysis completed using {model_name}."
                         )
-                        return "\n\n".join(text_parts)
+                        return answer
 
-                last_error = (
-                    f"{model_name}: No readable translation returned."
+                feedback = data.get("promptFeedback", {})
+                reason = feedback.get(
+                    "blockReason", "No text returned"
                 )
 
-            else:
-                error_message = res_json.get(
-                    "error", {}
-                ).get("message", "Unknown API error")
+                errors.append(f"{model_name}: {reason}")
+                continue
 
-                last_error = f"{model_name}: {error_message}"
+            error_info = data.get("error", {})
+            error_message = error_info.get(
+                "message", "Unknown API error"
+            )
+            error_code = error_info.get(
+                "code", response.status_code
+            )
+            error_status = error_info.get("status", "")
+
+            errors.append(
+                f"{model_name}: HTTP {error_code}: {error_message}"
+            )
+
+            lower_message = error_message.lower()
+
+            # Try the next model for unavailable model IDs.
+            model_issue = any(
+                phrase in lower_message
+                for phrase in [
+                    "not found",
+                    "not supported",
+                    "unsupported",
+                    "no longer available",
+                    "no longer supported",
+                    "update your code",
+                ]
+            )
+
+            if model_issue:
+                continue
+
+            # A 429 can be model-specific. Try another eligible
+            # model, but report quota failure if all attempts fail.
+            if (
+                error_code == 429
+                or error_status == "RESOURCE_EXHAUSTED"
+            ):
+                continue
+
+            # Invalid requests and authentication/permission errors
+            # are unlikely to be fixed by switching models.
+            if error_code in (400, 401, 403):
+                return (
+                    "❌ **Gemini rejected the request.**\n\n"
+                    f"**Details:** {error_message}\n\n"
+                    "Check the API key, permissions and request."
+                )
 
         except requests.Timeout:
-            last_error = f"{model_name}: Request timed out."
+            errors.append(f"{model_name}: Request timed out.")
 
         except requests.RequestException as e:
-            last_error = f"{model_name}: Network error: {str(e)}"
+            errors.append(f"{model_name}: Network error: {e}")
 
         except Exception as e:
-            last_error = f"{model_name}: {str(e)}"
+            errors.append(f"{model_name}: {e}")
+
+    combined_errors = "\n\n".join(
+        f"- {error}" for error in errors[-8:]
+    )
+
+    # Make quota failures easier to recognize.
+    if any(
+        "429" in error
+        or "quota" in error.lower()
+        or "resource_exhausted" in error.lower()
+        for error in errors
+    ):
+        return (
+            "⚠️ **Gemini API quota or rate limit reached.**\n\n"
+            "The app tried other eligible models, but the requests "
+            "did not succeed. Check the quota and billing for your "
+            "Google AI Studio project.\n\n"
+            f"**Attempt details:**\n{combined_errors}"
+        )
 
     return (
         "❌ **Translation failed.**\n\n"
-        f"**Details:** {last_error}\n\n"
-        "Check your API key, model availability, quota, and network."
+        "No available model completed the request.\n\n"
+        f"**Attempt details:**\n{combined_errors}"
     )
 
 
 # ==========================================
-# 7. MAIN WORKSPACE
+# 8. MAIN WORKSPACE
 # ==========================================
 st.markdown("---")
 
@@ -473,7 +590,7 @@ with col1:
     )
 
     uploaded_file = st.file_uploader(
-        "Upload an image",
+        "Upload an inscription image",
         type=["png", "jpg", "jpeg"],
         accept_multiple_files=False,
         help="Supported formats: PNG, JPG and JPEG.",
@@ -496,34 +613,7 @@ with col1:
 with col2:
     st.markdown("### 🔍 Your Discovery")
 
-    if uploaded_file is not None:
-
-        if not api_key:
-            st.error(
-                "⚠️ API key not configured. "
-                "Add GEMINI_API_KEY to your Streamlit secrets."
-            )
-
-        elif st.button(
-            "Begin translation ➜",
-            type="primary",
-            use_container_width=True
-        ):
-            status_placeholder = st.empty()
-
-            with st.spinner(
-                "Analyzing the inscription and interpreting its text..."
-            ):
-                result = translate_inscription_fast(
-                    uploaded_file,
-                    api_key,
-                    status_placeholder
-                )
-
-            st.markdown("---")
-            st.markdown(result)
-
-    else:
+    if uploaded_file is None:
         st.markdown(
             """
             <div class="discovery-placeholder">
@@ -532,17 +622,41 @@ with col2:
                 </p>
                 <p class="placeholder-text">
                     Upload an inscription to explore its historical
-                    context, Telugu meaning, and English translation
-                    using AI.
+                    context, Telugu meaning and English translation
+                    using multimodal AI.
                 </p>
             </div>
             """,
             unsafe_allow_html=True
         )
 
+    elif not api_key:
+        st.error(
+            "⚠️ `GEMINI_API_KEY` is missing from Streamlit secrets."
+        )
+
+    elif st.button(
+        "Begin translation ➜",
+        type="primary",
+        use_container_width=True
+    ):
+        status_placeholder = st.empty()
+
+        with st.spinner(
+            "Analyzing the inscription and interpreting its text..."
+        ):
+            result = translate_inscription(
+                uploaded_file,
+                api_key,
+                status_placeholder
+            )
+
+        st.markdown("---")
+        st.markdown(result)
+
 
 # ==========================================
-# 8. FOOTER
+# 9. FOOTER
 # ==========================================
 st.markdown("---")
 
