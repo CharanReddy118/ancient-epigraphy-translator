@@ -379,8 +379,8 @@ def translate_inscription_fast(image_file, key, status_box):
         }]
     }
     target_models = [
-        "gemini-2.0-flash",
-        "gemini-1.5-pro"
+        "gemini-1.5-pro-latest",
+        "gemini-1.5-flash-latest"
     ]
 
     last_error = ""
