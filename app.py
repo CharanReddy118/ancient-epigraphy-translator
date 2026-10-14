@@ -5,24 +5,28 @@ import base64
 import io
 from PIL import Image
 
-# 1. Page Configuration
+# ==========================================
+# 1. PAGE CONFIGURATION
+# ==========================================
 st.set_page_config(
     page_title="Heritage Inscription Archive",
     page_icon="📜",
     layout="wide"
 )
 
-# 2. Heritage Theme CSS
+# ==========================================
+# 2. CUSTOM HERITAGE THEME
+# ==========================================
 st.markdown("""
 <style>
     /* Main application */
     .stApp {
-        background-color: #FCFBF8;
-        color: #293A32;
+        background-color: #FCFBF8 !important;
+        color: #293A32 !important;
         font-family: 'Inter', sans-serif;
     }
 
-    /* Hide default Streamlit elements */
+    /* Hide Streamlit default elements */
     #MainMenu,
     footer,
     header {
@@ -31,11 +35,11 @@ st.markdown("""
 
     /* Sidebar */
     [data-testid="stSidebar"] {
-        background-color: #252730;
+        background-color: #252730 !important;
     }
 
     [data-testid="stSidebar"] * {
-        color: #F7F5EF;
+        color: #F7F5EF !important;
     }
 
     /* Hero section */
@@ -44,7 +48,7 @@ st.markdown("""
         font-size: 0.85rem;
         text-transform: uppercase;
         letter-spacing: 0.22rem;
-        color: #92774D;
+        color: #92774D !important;
         font-weight: 600;
         margin-bottom: 0.6rem;
     }
@@ -53,7 +57,7 @@ st.markdown("""
         text-align: center;
         font-size: 2.5rem;
         font-weight: 700;
-        color: #1B3B2B;
+        color: #1B3B2B !important;
         margin-bottom: 0.5rem;
         font-family: Georgia, serif;
     }
@@ -61,96 +65,127 @@ st.markdown("""
     .hero-subtitle {
         text-align: center;
         font-size: 1.05rem;
-        color: #63736A;
+        color: #63736A !important;
         margin: 0 auto 2.5rem auto;
         max-width: 850px;
         line-height: 1.8;
     }
 
-    /* Section headings */
-    h3 {
+    h1, h2, h3, h4 {
         color: #263C31 !important;
     }
 
-    /* ========================================
-       FRIENDLY FILE UPLOADER
-       ======================================== */
+    /* ==========================================
+       FILE UPLOADER - LIGHT HERITAGE DESIGN
+       ========================================== */
 
-    /* Main upload area */
+    /* Outer uploader container */
     [data-testid="stFileUploader"] {
+        background: #F1F5EF !important;
         background-color: #F1F5EF !important;
         border: 1px solid #D7E2D5 !important;
         border-radius: 14px !important;
         padding: 12px !important;
-        transition: border-color 0.2s ease,
-                    background-color 0.2s ease;
     }
 
-    /* Drag and drop area */
-    [data-testid="stFileUploadDropzone"] {
+    /* Target uploader dropzone */
+    [data-testid="stFileUploaderDropzone"],
+    [data-testid="stFileUploadDropzone"],
+    [data-testid="stFileUploader"] section,
+    [data-testid="stFileUploader"] section > div {
+        background: #F8FAF6 !important;
         background-color: #F8FAF6 !important;
         border: 2px dashed #A8BEA8 !important;
         border-radius: 10px !important;
-        padding: 28px 16px !important;
-        transition: all 0.2s ease-in-out;
+        box-shadow: none !important;
     }
 
-    /* Hover effect on upload area */
-    [data-testid="stFileUploadDropzone"]:hover {
-        background-color: #EDF4EA !important;
-        border-color: #527B5D !important;
+    /* Override dark backgrounds on uploader descendants,
+       excluding buttons and SVG icons */
+    [data-testid="stFileUploader"] section,
+    [data-testid="stFileUploader"] section > div,
+    [data-testid="stFileUploaderDropzone"],
+    [data-testid="stFileUploadDropzone"] {
+        color: #344B3C !important;
     }
 
-    /* Upload instructions and labels */
-    [data-testid="stFileUploadDropzone"] *,
-    [data-testid="stFileUploader"] small {
+    /* Drag-and-drop instructions */
+    [data-testid="stFileUploader"] section p,
+    [data-testid="stFileUploader"] section span,
+    [data-testid="stFileUploader"] section small,
+    [data-testid="stFileUploader"] [data-testid="stFileUploadDropzoneInstructions"],
+    [data-testid="stFileUploadDropzone"] p,
+    [data-testid="stFileUploadDropzone"] span,
+    [data-testid="stFileUploadDropzone"] small {
         color: #42594A !important;
     }
 
-    [data-testid="stFileUploadDropzone"] p {
-        font-size: 0.95rem !important;
-    }
-
-    /* Browse files button */
+    /* Upload button */
+    [data-testid="stFileUploader"] section button,
+    [data-testid="stFileUploaderDropzone"] button,
     [data-testid="stFileUploadDropzone"] button {
+        background: #24543A !important;
         background-color: #24543A !important;
         color: #FFFFFF !important;
         border: 1px solid #24543A !important;
         border-radius: 7px !important;
         font-weight: 600 !important;
         padding: 0.45rem 1.2rem !important;
-        transition: background-color 0.2s ease;
+        box-shadow: none !important;
+        opacity: 1 !important;
     }
 
-    [data-testid="stFileUploadDropzone"] button *,
-    [data-testid="stFileUploadDropzone"] button span {
+    /* Button label */
+    [data-testid="stFileUploader"] section button *,
+    [data-testid="stFileUploaderDropzone"] button *,
+    [data-testid="stFileUploadDropzone"] button * {
         color: #FFFFFF !important;
+        fill: #FFFFFF !important;
+        opacity: 1 !important;
     }
 
+    /* Upload icon */
+    [data-testid="stFileUploader"] section button svg,
+    [data-testid="stFileUploadDropzone"] button svg,
+    [data-testid="stFileUploadDropzone"] button svg {
+        fill: #FFFFFF !important;
+        color: #FFFFFF !important;
+        stroke: #FFFFFF !important;
+    }
+
+    /* Button hover */
+    [data-testid="stFileUploader"] section button:hover,
+    [data-testid="stFileUploaderDropzone"] button:hover,
     [data-testid="stFileUploadDropzone"] button:hover {
+        background: #36724F !important;
         background-color: #36724F !important;
         border-color: #36724F !important;
     }
 
-    /* Uploaded file information */
-    [data-testid="stFileUploaderFile"] {
+    /* Dropzone hover */
+    [data-testid="stFileUploader"] section:hover,
+    [data-testid="stFileUploadDropzone"]:hover {
+        background: #EDF4EA !important;
+        background-color: #EDF4EA !important;
+        border-color: #527B5D !important;
+    }
+
+    /* Uploaded file card */
+    [data-testid="stFileUploaderFile"],
+    [data-testid="stFileUploader"] [data-testid="stFileUploaderFile"] {
+        background: #FFFFFF !important;
         background-color: #FFFFFF !important;
         border: 1px solid #DCE5D9 !important;
         border-radius: 8px !important;
-        padding: 8px !important;
     }
 
     [data-testid="stFileUploaderFile"] * {
         color: #344B3C !important;
     }
 
-    /* Image preview */
-    [data-testid="stImage"] img {
-        border-radius: 10px;
-    }
-
     /* General buttons */
     div.stButton > button {
+        background: #24543A !important;
         background-color: #24543A !important;
         color: #FFFFFF !important;
         border: 1px solid #24543A !important;
@@ -161,6 +196,7 @@ st.markdown("""
     }
 
     div.stButton > button:hover {
+        background: #36724F !important;
         background-color: #36724F !important;
         border-color: #36724F !important;
         color: #FFFFFF !important;
@@ -171,33 +207,39 @@ st.markdown("""
         outline-offset: 3px !important;
     }
 
-    /* Translation result container */
+    /* Image preview */
+    [data-testid="stImage"] img {
+        border-radius: 10px !important;
+    }
+
+    /* Translation placeholder */
     .discovery-placeholder {
         padding: 3rem 1.2rem;
         text-align: center;
-        background-color: #FFFFFF;
+        background: #FFFFFF;
         border: 1px solid #E1E7DE;
         border-radius: 12px;
         color: #68796D;
     }
 
-    .discovery-placeholder .placeholder-title {
+    .placeholder-title {
         font-size: 1.1rem;
-        color: #344B3C;
+        color: #344B3C !important;
         margin-bottom: 0.6rem;
     }
 
-    .discovery-placeholder .placeholder-text {
+    .placeholder-text {
         font-size: 0.9rem;
         line-height: 1.7;
+        color: #68796D !important;
     }
 
     /* Alerts */
     [data-testid="stAlert"] {
-        border-radius: 9px;
+        border-radius: 9px !important;
     }
 
-    /* Mobile-friendly layout */
+    /* Responsive design */
     @media (max-width: 768px) {
         .hero-title {
             font-size: 1.8rem;
@@ -213,19 +255,23 @@ st.markdown("""
             margin-bottom: 1.5rem;
         }
 
-        [data-testid="stFileUploadDropzone"] {
-            padding: 18px 10px !important;
+        [data-testid="stFileUploader"] {
+            padding: 8px !important;
         }
     }
 </style>
 """, unsafe_allow_html=True)
 
 
-# 3. Secure API Key Handling
+# ==========================================
+# 3. GEMINI API KEY
+# ==========================================
 api_key = st.secrets.get("GEMINI_API_KEY", "")
 
 
-# 4. Sidebar
+# ==========================================
+# 4. SIDEBAR
+# ==========================================
 st.sidebar.markdown("### 🏛️ Heritage Archive")
 st.sidebar.markdown(
     "**Project:** Universal Epigraphy Translator"
@@ -241,7 +287,9 @@ st.sidebar.markdown(
 )
 
 
-# 5. Hero Section
+# ==========================================
+# 5. HERO SECTION
+# ==========================================
 st.markdown(
     '<p class="hero-tag">PRESERVING THE STORIES OF OUR PAST</p>',
     unsafe_allow_html=True
@@ -263,13 +311,15 @@ st.markdown(
 )
 
 
-# 6. Vision Translation Engine
+# ==========================================
+# 6. TRANSLATION ENGINE
+# ==========================================
 def translate_inscription_fast(image_file, key, status_box):
 
     if not key:
         return (
             "⚠️ **Error:** API key is missing. "
-            "Add `GEMINI_API_KEY` to Streamlit secrets."
+            "Configure `GEMINI_API_KEY` in Streamlit secrets."
         )
 
     try:
@@ -277,7 +327,6 @@ def translate_inscription_fast(image_file, key, status_box):
 
         with Image.open(image_file) as original_image:
             img = original_image.convert("RGB")
-
             buffered = io.BytesIO()
             img.save(buffered, format="JPEG", quality=90)
 
@@ -294,42 +343,42 @@ def translate_inscription_fast(image_file, key, status_box):
     Carefully analyze the attached photograph of an ancient inscription.
 
     Tasks:
-    1. Identify the script and transcribe only the characters that
-       can reasonably be read.
-    2. Explain the historical context, including the possible dynasty,
-       ruler, period, and purpose, when supported by evidence.
+    1. Identify the script and transcribe readable characters.
+    2. Explain the historical context, dynasty, ruler, period, and
+       purpose when supported by evidence.
     3. Translate the readable content into modern Telugu.
     4. Translate the readable content into modern English.
-    5. Clearly identify uncertain, damaged, or illegible text.
+    5. Identify damaged, uncertain, or illegible portions.
     6. Never invent unreadable words or unsupported historical facts.
-       Distinguish confirmed information from tentative interpretations.
+       Clearly distinguish confirmed information from interpretations.
 
-    Format your response using Markdown:
+    Format your response in Markdown:
 
     ### 📜 Historical Context
+
     ### 🔤 Script Identification and Transcription
+
     ### 🇮🇳 Modern Telugu Translation (ఆధునిక తెలుగు భావం)
+
     ### 🇬🇧 Modern English Translation
+
     ### 📝 Notes and Uncertainties
     """
 
     payload = {
-        "contents": [
-            {
-                "parts": [
-                    {"text": prompt},
-                    {
-                        "inline_data": {
-                            "mime_type": "image/jpeg",
-                            "data": img_b64
-                        }
+        "contents": [{
+            "parts": [
+                {"text": prompt},
+                {
+                    "inline_data": {
+                        "mime_type": "image/jpeg",
+                        "data": img_b64
                     }
-                ]
-            }
-        ]
+                }
+            ]
+        }]
     }
 
-    # Try models in order if a model is unavailable.
     target_models = [
         "gemini-2.0-flash",
         "gemini-1.5-pro",
@@ -362,7 +411,7 @@ def translate_inscription_fast(image_file, key, status_box):
                 res_json = response.json()
             except ValueError:
                 last_error = (
-                    f"{model_name}: The API returned an invalid response."
+                    f"{model_name}: Invalid response from the API."
                 )
                 continue
 
@@ -386,15 +435,15 @@ def translate_inscription_fast(image_file, key, status_box):
                         return "\n\n".join(text_parts)
 
                 last_error = (
-                    f"{model_name}: No readable translation was returned."
+                    f"{model_name}: No readable translation returned."
                 )
 
             else:
-                err_msg = res_json.get(
+                error_message = res_json.get(
                     "error", {}
                 ).get("message", "Unknown API error")
 
-                last_error = f"{model_name}: {err_msg}"
+                last_error = f"{model_name}: {error_message}"
 
         except requests.Timeout:
             last_error = f"{model_name}: Request timed out."
@@ -412,7 +461,9 @@ def translate_inscription_fast(image_file, key, status_box):
     )
 
 
-# 7. Main Workspace
+# ==========================================
+# 7. MAIN WORKSPACE
+# ==========================================
 st.markdown("---")
 
 col1, col2 = st.columns(2, gap="large")
@@ -456,25 +507,24 @@ with col2:
                 "Add GEMINI_API_KEY to your Streamlit secrets."
             )
 
-        else:
-            if st.button(
-                "Begin translation  ➜",
-                type="primary",
-                use_container_width=True
+        elif st.button(
+            "Begin translation ➜",
+            type="primary",
+            use_container_width=True
+        ):
+            status_placeholder = st.empty()
+
+            with st.spinner(
+                "Analyzing the inscription and interpreting its text..."
             ):
-                status_placeholder = st.empty()
+                result = translate_inscription_fast(
+                    uploaded_file,
+                    api_key,
+                    status_placeholder
+                )
 
-                with st.spinner(
-                    "Analyzing the inscription and interpreting its text..."
-                ):
-                    result = translate_inscription_fast(
-                        uploaded_file,
-                        api_key,
-                        status_placeholder
-                    )
-
-                st.markdown("---")
-                st.markdown(result)
+            st.markdown("---")
+            st.markdown(result)
 
     else:
         st.markdown(
@@ -484,9 +534,9 @@ with col2:
                     Your translation will appear here.
                 </p>
                 <p class="placeholder-text">
-                    Upload an inscription to begin exploring its
-                    historical context, Telugu meaning, and
-                    English translation with AI.
+                    Upload an inscription to explore its historical
+                    context, Telugu meaning, and English translation
+                    using AI.
                 </p>
             </div>
             """,
@@ -494,7 +544,9 @@ with col2:
         )
 
 
-# 8. Footer
+# ==========================================
+# 8. FOOTER
+# ==========================================
 st.markdown("---")
 
 st.markdown(
