@@ -6,61 +6,89 @@ from PIL import Image
 
 # 1. Page Configuration
 st.set_page_config(
-    page_title="Epigraphy & Script Translator Dashboard",
+    page_title="Heritage Inscription Archive",
     page_icon="📜",
     layout="wide"
 )
 
-# Custom Dashboard Styling
+# Custom Heritage Theme CSS (Matching your exact design screenshots)
 st.markdown("""
     <style>
-        .main-header { font-size: 2.2rem; font-weight: 700; color: #f3f4f6; margin-bottom: 0rem; }
-        .sub-header { font-size: 1rem; color: #9ca3af; margin-bottom: 2rem; }
-        .metric-card { background-color: #1f2937; padding: 1rem; border-radius: 0.5rem; border: 1px solid #374151; }
+        /* Main background and font styling */
+        .stApp {
+            background-color: #fcfbfa;
+            color: #2c3531;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        /* Hide default Streamlit elements */
+        #MainMenu {visibility: hidden;}
+        footer {visibility: hidden;}
+        header {visibility: hidden;}
+
+        /* Typography */
+        .hero-tag {
+            text-align: center;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2rem;
+            color: #8c7853;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        .hero-title {
+            text-align: center;
+            font-size: 2.8rem;
+            font-weight: 700;
+            color: #1b3b2b;
+            margin-bottom: 0.5rem;
+            font-family: serif;
+        }
+        .hero-subtitle {
+            text-align: center;
+            font-size: 1.05rem;
+            color: #5c6b63;
+            margin-bottom: 2.5rem;
+        }
+
+        /* Custom Containers / Cards */
+        div.stButton > button:first-child {
+            background-color: #1b3b2b;
+            color: white;
+            border-radius: 4px;
+            padding: 0.6rem 1.5rem;
+            font-weight: 500;
+            border: none;
+            width: 100%;
+        }
+        div.stButton > button:first-child:hover {
+            background-color: #2c5843;
+            color: white;
+        }
     </style>
 """, unsafe_allow_html=True)
 
-# 2. API Key Configuration
-secret_key = ""
+# 2. Secure Secret Key Handling (Completely hidden from user)
+api_key = ""
 if "GEMINI_API_KEY" in st.secrets:
-    secret_key = st.secrets["GEMINI_API_KEY"]
+    api_key = st.secrets["GEMINI_API_KEY"]
 
-st.sidebar.header("🎛️ Workspace Control")
-st.sidebar.markdown("Manage your epigraphic analysis workspace settings.")
-user_key_input = st.sidebar.text_input("Gemini API Key (Optional)", type="password")
-
-api_key = user_key_input.strip() if user_key_input.strip() else secret_key
-
-if secret_key and not user_key_input:
-    st.sidebar.success("⚡ System API Key Active")
-elif not api_key:
-    st.sidebar.warning("⚠️ No API Key Configured")
-
+# Minimalist sidebar
+st.sidebar.markdown("### 🏛️ Heritage Archive")
+st.sidebar.markdown("**Project:** Universal Epigraphy Translator")
 st.sidebar.markdown("---")
-st.sidebar.markdown("### 📊 System Stats")
-st.sidebar.markdown("• **Engine:** Gemini Vision API\n• **Timeout Limit:** 120s\n• **Fallback:** Multi-Model Active\n• **Status:** Operational 🟢")
+st.sidebar.markdown("### 📊 System Status")
+st.sidebar.markdown("• **Engine:** Gemini Vision API\n• **Timeout Limit:** 120s\n• **Status:** Online 🟢")
 
-# Dashboard Title Banner
-st.markdown('<p class="main-header">📜 Epigraphy & Script Translator Dashboard</p>', unsafe_allow_html=True)
-st.markdown('<p class="sub-header">Advanced multimodal analysis workspace for ancient stone inscriptions, copper plates, and manuscripts.</p>', unsafe_allow_html=True)
-
-# Top Dashboard Metrics Row
-m1, m2, m3, m4 = st.columns(4)
-with m1:
-    st.metric(label="Active Models", value="3-Tier Fallback", delta="Optimized")
-with m2:
-    st.metric(label="Processing Limit", value="120 Seconds", delta="Extended Timeout")
-with m3:
-    st.metric(label="Output Languages", value="Telugu & English", delta="Bilingual")
-with m4:
-    st.metric(label="Security Vault", value="Streamlit Secrets", delta="Secured 🔒")
-
-st.markdown("---")
+# Header Section
+st.markdown('<p class="hero-tag">PRESERVING THE STORIES OF OUR PAST</p>', unsafe_allow_html=True)
+st.markdown('<p class="hero-title">Bring the past into focus.</p>', unsafe_allow_html=True)
+st.markdown('<p class="hero-subtitle">Start with a photograph of a temple inscription or manuscript to explore its historical text and English meaning.</p>', unsafe_allow_html=True)
 
 # 3. Vision Translation Engine Function
 def translate_inscription_fast(image_file, key, status_box):
     if not key:
-        return "⚠️ **Error:** No valid Gemini API key found."
+        return "⚠️ **Error:** System API Key is missing in Streamlit Cloud secrets."
 
     try:
         img = Image.open(image_file).convert('RGB')
@@ -112,7 +140,7 @@ def translate_inscription_fast(image_file, key, status_box):
 
     last_error = ""
     for model_name in target_models:
-        status_box.text(f"⚡ Connecting to model: {model_name}...")
+        status_box.text("⚡ Processing artifact matrix...")
         url = f"https://generativelanguage.googleapis.com/v1beta/models/{model_name}:generateContent?key={key}"
         
         try:
@@ -122,7 +150,7 @@ def translate_inscription_fast(image_file, key, status_box):
             if response.status_code == 200:
                 candidates = res_json.get('candidates', [])
                 if candidates and 'content' in candidates[0]:
-                    status_box.text("✅ Analysis completed successfully!")
+                    status_box.text("✅ Decipherment completed successfully!")
                     return candidates[0]['content']['parts'][0]['text']
             else:
                 err_msg = res_json.get('error', {}).get('message', 'Rejected')
@@ -134,27 +162,39 @@ def translate_inscription_fast(image_file, key, status_box):
 
     return f"❌ **Execution Failed.**\n\nDetails: {last_error}"
 
-# 4. Main Workspace Layout (Dashboard Split)
-uploaded_file = st.file_uploader("📂 Upload Inscription Image (PNG, JPG, JPEG)", type=['png', 'jpg', 'jpeg'])
+# 4. Main Workspace Layout (Two-Card Design matching screenshots)
+st.markdown("---")
+col1, col2 = st.columns(2, gap="large")
 
-if uploaded_file is not None:
-    col1, col2 = st.columns([1, 1], gap="large")
+with col1:
+    st.markdown("### 📤 Upload an inscription")
+    uploaded_file = st.file_uploader("Choose a photo from your phone or computer", type=['png', 'jpg', 'jpeg'], label_visibility="collapsed")
+    
+    if uploaded_file is not None:
+        st.image(uploaded_file, caption="Selected Artifact", use_container_width=True)
+    else:
+        st.info("Drag and drop or browse to select an inscription image (PNG, JPG).")
 
-    with col1:
-        st.markdown("### 🖼️ Artifact Preview")
-        st.image(uploaded_file, caption="Uploaded Artifact Matrix", use_container_width=True)
-
-    with col2:
-        st.markdown("### 🔍 Epigraphic Intelligence Workspace")
-        
+with col2:
+    st.markdown("### 🔍 Your Discovery")
+    
+    if uploaded_file is not None:
         if not api_key:
-            st.warning("👈 Please enter your Gemini API key in the sidebar to run analysis.")
+            st.error("⚠️ System Error: GEMINI_API_KEY is not configured in Streamlit secrets.")
         else:
-            if st.button("🚀 Decipher & Translate Artifact", type="primary", use_container_width=True):
+            if st.button("Begin translation ➔", type="primary"):
                 status_placeholder = st.empty()
-                with st.spinner("Executing multimodal vision analysis..."):
+                with st.spinner("Analyzing stone matrix and script structures..."):
                     result = translate_inscription_fast(uploaded_file, api_key, status_placeholder)
                     st.markdown("---")
                     st.markdown(result)
-else:
-    st.info("👆 Upload an inscription image above to initialize the analysis workspace.")
+    else:
+        st.markdown("""
+            <div style="padding: 3rem 1rem; text-align: center; color: #8c9a92; border: 1px dashed #d1d8d3; border-radius: 8px;">
+                <p style="font-size: 1.1rem; margin-bottom: 0.5rem;">Your translation will appear here.</p>
+                <p style="font-size: 0.85rem;">This step processes the inscription pixels using multimodal AI.</p>
+            </div>
+        """, unsafe_allow_html=True)
+
+# Footer
+st.markdown("<br><hr><p style='text-align: center; color: #8c9a92; font-size: 0.8rem;'>Heritage Inscription Archive • A project to preserve cultural history</p>", unsafe_allow_html=True)
