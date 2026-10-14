@@ -380,10 +380,10 @@ def translate_inscription_fast(image_file, key, status_box):
 
     # 2. BULLETPROOF MODEL TAGS
     target_models = [
-        "gemini-3.8-flash",
-        "gemini-3.6-flash",
-        "gemini-2.5-flash",
-        "gemini-2.5-flash-lite",
+        "gemini-1.5-flash-001",   # Fixed flash version (most reliable)
+        "gemini-1.5-pro-001",     # Fixed pro version
+        "gemini-1.0-pro-vision-latest", # Legacy fallback
+        "gemini-pro-vision"
     ]
 
     last_error = ""
